@@ -56,10 +56,16 @@
         .gauge-label { fill: #666; font-size: 0.2em; text-anchor: middle; }
     </style>
 </head>
-<body class="text-brand-dark h-screen flex overflow-hidden">
+<body class="text-brand-dark h-screen flex overflow-hidden relative">
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-20 hidden md:hidden transition-opacity"></div>
 
     <!-- Sidebar -->
-    <aside class="w-64 bg-brand-dark text-white flex flex-col transition-all duration-300 z-20">
+    <aside id="sidebar" class="fixed inset-y-0 left-0 transform -translate-x-full md:relative md:translate-x-0 w-64 bg-brand-dark text-white flex flex-col transition-transform duration-300 z-30 shadow-2xl md:shadow-none">
+        <button onclick="toggleSidebar()" class="md:hidden absolute top-5 right-4 text-gray-400 hover:text-white">
+            <i class="ph ph-x text-2xl"></i>
+        </button>
         <div class="p-6 flex items-center gap-3 border-b border-gray-700">
             <div class="w-10 h-10 bg-kwanza-500 rounded-lg flex items-center justify-center text-brand-dark font-bold text-xl">
                 K
@@ -100,28 +106,33 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full">
         
         <!-- Header -->
-        <header class="bg-white border-b border-gray-200 h-20 flex items-center justify-between px-8 z-10 shadow-sm">
-            <h2 class="text-2xl font-semibold" id="page-title">Visão Geral</h2>
+        <header class="bg-white border-b border-gray-200 h-20 flex items-center justify-between px-4 md:px-8 z-10 shadow-sm w-full">
+            <div class="flex items-center gap-3 overflow-hidden">
+                <button onclick="toggleSidebar()" class="md:hidden text-brand-dark p-1 hover:bg-gray-100 rounded-lg transition">
+                    <i class="ph ph-list text-2xl"></i>
+                </button>
+                <h2 class="text-lg md:text-2xl font-semibold truncate" id="page-title">Visão Geral</h2>
+            </div>
             
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-2 md:gap-6 flex-shrink-0">
                 <!-- Role Switcher for Presentation Purposes -->
                 <div class="bg-gray-100 p-1 rounded-lg flex items-center border border-gray-200">
-                    <button onclick="toggleRole('pme')" id="btn-role-pme" class="px-4 py-1.5 rounded-md bg-white shadow-sm text-sm font-medium transition-all">Visão PME</button>
-                    <button onclick="toggleRole('contabilista')" id="btn-role-contabilista" class="px-4 py-1.5 rounded-md text-gray-500 text-sm font-medium transition-all hover:text-brand-dark">Visão Contabilista</button>
+                    <button onclick="toggleRole('pme')" id="btn-role-pme" class="px-2 py-1 md:px-4 md:py-1.5 rounded-md bg-white shadow-sm text-xs md:text-sm font-medium transition-all text-brand-dark">Visão PME</button>
+                    <button onclick="toggleRole('contabilista')" id="btn-role-contabilista" class="px-2 py-1 md:px-4 md:py-1.5 rounded-md text-gray-500 text-xs md:text-sm font-medium transition-all hover:text-brand-dark">Visão Contabilista</button>
                 </div>
 
-                <button class="relative p-2 text-gray-500 hover:text-brand-dark transition">
-                    <i class="ph ph-bell text-2xl"></i>
-                    <span class="absolute top-1 right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
+                <button class="relative p-2 text-gray-500 hover:text-brand-dark transition hidden sm:block">
+                    <i class="ph ph-bell text-xl md:text-2xl"></i>
+                    <span class="absolute top-1 right-1 w-2 md:w-2.5 h-2 md:h-2.5 bg-red-500 rounded-full border-2 border-white"></span>
                 </button>
             </div>
         </header>
 
         <!-- Scrollable Area -->
-        <div class="flex-1 overflow-y-auto p-8" id="main-scroll-area">
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 w-full" id="main-scroll-area">
             
             <!-- ================= VIEW: DASHBOARD PME ================= -->
             <div id="view-dashboard-pme" class="fade-in">
@@ -367,21 +378,21 @@
                 </div>
 
                 <!-- Filters -->
-                <div class="bg-white p-4 rounded-xl border border-gray-200 mb-6 flex flex-wrap gap-3 shadow-sm">
-                    <select class="px-4 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-kwanza-500">
+                <div class="bg-white p-4 rounded-xl border border-gray-200 mb-6 flex flex-col sm:flex-row flex-wrap gap-3 shadow-sm">
+                    <select class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-kwanza-500">
                         <option>Todos os Serviços</option>
                         <option>Revisão SAF-T (AO)</option>
                         <option>Fecho Mensal</option>
                         <option>Constituição de Empresa</option>
                         <option>Consultoria Fiscal</option>
                     </select>
-                    <select class="px-4 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-kwanza-500">
+                    <select class="w-full sm:w-auto px-4 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:border-kwanza-500">
                         <option>Província</option>
                         <option>Luanda</option>
                         <option>Benguela</option>
                         <option>Huíla</option>
                     </select>
-                    <div class="relative flex-1 min-w-[200px]">
+                    <div class="relative flex-1 w-full sm:w-auto min-w-[200px]">
                         <input type="text" placeholder="Procurar contabilista ou serviço..." class="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-kwanza-500">
                         <i class="ph ph-magnifying-glass absolute left-3 top-2.5 text-gray-400 text-lg"></i>
                     </div>
@@ -536,6 +547,21 @@
         // State Management
         let currentRole = 'pme'; // 'pme' or 'contabilista'
         let currentView = 'dashboard'; // 'dashboard', 'marketplace', 'ia', 'documentos'
+        let isSidebarOpen = false;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            isSidebarOpen = !isSidebarOpen;
+            
+            if (isSidebarOpen) {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
 
         function toggleRole(role) {
             currentRole = role;
@@ -544,16 +570,19 @@
             const btnPme = document.getElementById('btn-role-pme');
             const btnCont = document.getElementById('btn-role-contabilista');
             
+            const activeClass = 'px-2 py-1 md:px-4 md:py-1.5 rounded-md bg-white shadow-sm text-xs md:text-sm font-medium transition-all text-brand-dark';
+            const inactiveClass = 'px-2 py-1 md:px-4 md:py-1.5 rounded-md text-gray-500 text-xs md:text-sm font-medium transition-all hover:text-brand-dark bg-transparent shadow-none';
+            
             if (role === 'pme') {
-                btnPme.className = 'px-4 py-1.5 rounded-md bg-white shadow-sm text-sm font-medium transition-all text-brand-dark';
-                btnCont.className = 'px-4 py-1.5 rounded-md text-gray-500 text-sm font-medium transition-all hover:text-brand-dark bg-transparent shadow-none';
+                btnPme.className = activeClass;
+                btnCont.className = inactiveClass;
                 
                 // Update User Info
                 document.getElementById('user-name').innerText = 'João Silva';
                 document.getElementById('user-company').innerText = 'Angola PME Lda.';
             } else {
-                btnCont.className = 'px-4 py-1.5 rounded-md bg-white shadow-sm text-sm font-medium transition-all text-brand-dark';
-                btnPme.className = 'px-4 py-1.5 rounded-md text-gray-500 text-sm font-medium transition-all hover:text-brand-dark bg-transparent shadow-none';
+                btnCont.className = activeClass;
+                btnPme.className = inactiveClass;
                 
                 // Update User Info
                 document.getElementById('user-name').innerText = 'Rui Fernandes';
@@ -610,6 +639,11 @@
                 }
             } else {
                 document.getElementById(`view-${viewName}`).classList.remove('hide');
+            }
+
+            // Close sidebar on mobile after navigating
+            if (window.innerWidth < 768 && isSidebarOpen) {
+                toggleSidebar();
             }
         }
 
